@@ -4,8 +4,6 @@ require 'json/ext'
 require 'clicksign/version'
 require 'clicksign/base'
 require 'clicksign/document'
-require 'clicksign/batch'
-require 'clicksign/hook'
 
 module Clicksign
   class << self
