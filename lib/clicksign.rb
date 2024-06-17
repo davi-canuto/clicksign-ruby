@@ -9,12 +9,20 @@ require 'clicksign/hook'
 
 module Clicksign
   class << self
-    attr_accessor :endpoint, :token, :api_version
+    attr_accessor :endpoint, :token, :api_version, :environment, :host
   end
 
   def self.configure(&block)
-    self.endpoint    = 'https://api.clicksign.com'
-    self.api_version = 'v1'
+    self.api_version = 'v3'
+    self.environment = :sandbox
+
+    if self.environment.to_sym == :production
+      self.host = "https://app.clicksign.com"
+    else
+      self.host = "https://sandbox.clicksign.com"
+    end
+
+    self.endpoint = self.host + "/api/#{self.api_version}"
 
     yield self
   end
