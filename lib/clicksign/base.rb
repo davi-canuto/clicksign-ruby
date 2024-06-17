@@ -1,17 +1,20 @@
 module Clicksign
   class Base
-    def self.accept_header
-      { accept: 'json' }
+    def self.headers
+      {
+        "Accept"=> 'application/vnd.api+json',
+        "Content-Type"=> 'application/vnd.api+json',
+        "Authorization"=> Clicksign.token
+      }
     end
 
     def self.request(method, *params)
-      params.last.merge! accept_header
+      params.last.merge! headers
       parse RestClient.public_send(method, *params)
     end
 
     def self.api_url(*path)
-      ([Clicksign.endpoint, Clicksign.api_version] + path).join("/") +
-        "?access_token=#{Clicksign.token}"
+      Clicksign.endpoint + path
     end
 
     def self.parse(response)
