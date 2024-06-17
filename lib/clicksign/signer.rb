@@ -1,5 +1,5 @@
 module Clicksign
-  class Envelope < Base
+  class Signer < Base
     def self.create(params = {})
       signers = params.delete(:signers)
       params['signers'] = [signers].flatten(1) if signers
