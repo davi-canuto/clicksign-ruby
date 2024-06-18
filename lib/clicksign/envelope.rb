@@ -7,7 +7,7 @@ module Clicksign
     def self.create params={}
       request :post,
         api_url(model_name),
-        build_data(params, { type: model_name}),
+        build_data(params, model_name),
         {}
     end
 
@@ -24,7 +24,7 @@ module Clicksign
 
       request :patch,
         api_url(model_name, key),
-        build_data(params, { type: model_name, id: key }),
+        build_data(params, model_name, key ),
         {}
     end
 

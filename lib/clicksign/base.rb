@@ -2,32 +2,38 @@ module Clicksign
   class Base
     def self.headers
       {
-        "Accept"=> 'application/vnd.api+json',
-        "Content-Type"=> 'application/vnd.api+json',
-        "Authorization"=> Clicksign.token
+        accept: 'application/vnd.api+json',
+        content_type: 'application/vnd.api+json',
+        authorization: Clicksign.token
       }
     end
 
-    def self.request method, *params
-      params.last.merge! headers
+    def self.request(method, *params)
+      params.last.merge!(headers)
       parse RestClient.public_send(method, *params)
     end
 
-    def self.api_url *path
+    def self.api_url(*path)
       ([Clicksign.endpoint] + path).join("/")
     end
 
-    def self.parse response
+    def self.parse(response)
       response = {} if response.empty?
       JSON[response]
     end
 
-    def self.build_data(params, type_and_id={})
-      {
+    def self.build_data(params, model_name, id='')
+      data = {
         data: {
-          attributes: params
+          attributes: params,
+          type: model_name
         }
-      }[:data].merge!(type_and_id)
+      }
+      unless id.empty?
+        data[:data][:id] = id
+      end
+
+      data.to_json
     end
   end
 end
