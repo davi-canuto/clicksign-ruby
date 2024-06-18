@@ -1,26 +1,21 @@
 # Clicksign Ruby Client
 
-Official gem to comunicate with the **[Clicksign REST API](http://clicksign.readme.io/)**.
+Fork of deprecated clicksign gem in Ruby.
+Works on documentation version 2.0: Envelope
 
 ## Installation
 
 With Bundler:
 
 ```
-gem 'clicksign'
-```
-
-Manual installation via RubyGems:
-
-```shell
-gem install clicksign
+gem 'clicksign', github: 'davi-canuto/clicksign-ruby', branch: 'main'
 ```
 
 ## Usage
 
 ### Setting up the client
 
-You must provide a valid `token` in order to use the library. As an option, you can also set a different `endpoint`.
+You must provide a valid `token` in order to use the library.
 
 The required `token` is provided by the Clicksign support team.
 
@@ -29,130 +24,50 @@ require 'clicksign'
 
 Clicksign.configure do |config|
   config.token = ENV['CLICKSIGN_TOKEN']
-  config.endpoint = 'https://api.clicksign-demo.com' # Default: 'api.clicksign.com'
+  config.environment = 'production'
 end
 ```
 
-### Retrieving a list of documents
+### Create a envelope
 
-You'll be able to make requests to the Clicksign API right after the initial setup. The first step would be to retrieve a list of documents that you've previously uploaded to your account.
+You'll be able to make requests to the Clicksign API right after the initial setup. The first step would be createa a envelope that will contain the rest of the documents, signers and e.t.c.
 
+For knowledge the permit parameters, visit [here](https://developers.clicksign.com/docs/criar-envelope)
 ```ruby
-documents = Clicksign::Document.all
+envelope = Clicksign::Envelope.create({
+  name: ''
+})
 ```
 
-### Uploading a document
-
-To upload a new document to Clicksign you can use the following snippet:
-
+This request will return a id, save this key for later use
 ```ruby
-document = Clicksign::Document.create(File.new('example.pdf'))
+@envelope_id = envelope["data"]["id"]
 ```
 
-You can also upload a new document and at the same time set up a signature list
-as follow:
+### Adding document
+
+To upload a new document into Clicksign envelope you can use the following snippet:
 
 ```ruby
-document = Clicksign::Document.create(File.new('example.pdf'), signers: [{ act: 'sign', email: 'john.doe@example.com' }], message: 'Please sign it', skip_email: true)
+document = Clicksign::Document.new(@envelope_id).add({
+  filename: '',
+  base64_content: "data:#{}\;base64,#{}"
+})
 ```
 
-It is important to notice that the additional parameters to `create` method is
-the same as the ones in the section [Creating a signature list](#user-content-creating-a-signature-list)
+### Adding signers
 
+To add a new signer into Clicksign envelope you can use the following snippet:
 
-### Retrieving a document
-
+For knowledge the permit parameters, visit [here](https://developers.clicksign.com/docs/adicionar-novo-signat%C3%A1rio-no-envelope)
 ```ruby
-found = Clicksign::Document.find(document_key)
+signer = Clicksign::Signer.new(@envelope_id).add({})
 ```
 
-### Downloading a document
+### Webhooks
 
-```ruby
-zip = Clicksign::Document.download(document_key)
-File.open('mydoc.zip', 'wb') { |f| f.write(zip) } if zip
-```
+To works with webhooks i'm also recomendely to use a [nexoos gem](https://github.com/NexoosBR/clicksign-webhooks)
+Provided me with everything I needed.
 
-If _found_ is _nil_, it means that the server is preparing the zip file.
-When the zip is ready, its contents are retrieved.
-
-### Creating a signature list
-
-The method `Clicksign::Document.create_list` accepts **3 arguments**, the latter being optional.
-
-The first argument is `document_key`, which represents the document's unique identification.
-
-The second argument is `signers`, an array of hashes with the e-mails of the signers and their actions (`act`). The available options for `act` are described in our [documentation](http://clicksign.github.io/rest-api/#criacao-de-lista-de-assinatura).
-
-The third and optional parameter is `skip_email`, a boolean that says whether the API should send e-mails to the signers or not.
-
-Example:
-
-```ruby
-document_key = KEY
-signers = [{ email: 'john.doe@example.com', act: 'sign' }]
-result = Clicksign::Document.create_list(document, signers, true)
-```
-
-### Resending a signature request
-
-Use the following snippet to send a email to a signer that have not signed yet:
-
-```ruby
-messsage = 'This is a reminder for you to sign the document.'
-Clicksign::Document.resend(key, email, message)
-```
-
-### Canceling a document
-
-```ruby
-doc = Clicksign::Document.cancel(document_key)
-```
-
-The method returns the canceled document.
-
-### Hooks
-
-You can perform three different actions with hooks: **retrieve** all, **create** a new one or **delete** an existing hook.
-
-Listing all hooks that belong to a document:
-
-```ruby
-Clicksign::Hook.all(document_key)
-```
-
-Creating a new hook for a specific document:
-
-```ruby
-Clicksign::Hook.create(document_key, 'http://example.com')
-```
-
-Destroying an existing hook:
-
-```ruby
-Clicksign::Hook.delete(document_key, hook_id)
-```
-
-### Batches
-
-Batches are you used to group documents in a package and perform batch signatures via the [Clicksign Widget](https://github.com/clicksign/widget).
-
-You can perform three different actions with batches: **retrieve** all, **create** a new one or **delete** an existing batch.
-
-Listing all batches:
-
-```ruby
-Clicksign::Batch.all
-```
-
-Creating a new batch for a group of documents:
-
-```ruby
-Clicksign::Batch.create([key1, key2, key3])
-```
-
-Destroying an existing batch:
-
-```ruby
-Clicksign::Batch.delete(batch_key)
-```
+This gem also created for a necessit implement integration with clicksign, and i`ve found the [deprecated documentation](https://github.com/clicksign/clicksign-ruby), forked it and works to my specifications.
+## CONTRIBUTE
