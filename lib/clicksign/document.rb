@@ -10,35 +10,10 @@ module Clicksign
       @envelope_key = envelope_key
     end
 
-    def add
-      Base.request :get,
-        Base.api_url('documents'),
-        {}
-    end
-
-    def find(key)
-      request :get,
-        api_url('documents', key),
-        {}
-    end
-
-    def update(file, params = {})
-      signers = params.delete(:signers)
-      params['signers'] = [signers].flatten(1) if signers
-
-      request :post,
-        api_url('documents'),
-        { "document[archive][original]" => file }.merge(params),
-        {}
-    end
-
-    def remove(file, params = {})
-      signers = params.delete(:signers)
-      params['signers'] = [signers].flatten(1) if signers
-
-      request :post,
-        api_url('documents'),
-        { "document[archive][original]" => file }.merge(params),
+    def add params={}
+      Base.request :post,
+        Base.api_url('envelopes', @envelope_key, Document.model_name),
+        Base.build_data(params, { type: Document.model_name }),
         {}
     end
   end
