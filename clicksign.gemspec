@@ -2,10 +2,10 @@ $:.push File.expand_path('../lib', __FILE__)
 require 'clicksign/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'clicksign'
+  spec.name          = 'clicksign-ruby'
   spec.version       = Clicksign::VERSION
-  spec.authors       = ['Clicksign']
-  spec.email         = ['suporte@clicksign.com']
+  spec.authors       = ['davi-canuto']
+  spec.email         = ['davicanutogregorio@gmail.com']
   spec.description   = %q{Ruby library to interact with Clicksign}
   spec.summary       = %q{Ruby library to interact with Clicksign}
   spec.license       = 'MIT'
