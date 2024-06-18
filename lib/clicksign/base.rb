@@ -13,12 +13,8 @@ module Clicksign
       parse RestClient.public_send(method, *params)
     end
 
-    def self.api_url *path, key=nil
-      url = Clicksign.endpoint + path
-      if key.present?
-        url += "/#{key}"
-      end
-      url
+    def self.api_url *path
+      ([Clicksign.endpoint] + path).join("/")
     end
 
     def self.parse response
@@ -26,14 +22,12 @@ module Clicksign
       JSON[response]
     end
 
-    def self.build_data params
-      { 
+    def self.build_data(params, type_and_id={})
+      {
         data: {
-          type: model_name,
-          id: params.delete(:id),
           attributes: params
         }
-      }
+      }[:data].merge!(type_and_id)
     end
   end
 end
