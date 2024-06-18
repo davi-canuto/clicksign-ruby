@@ -13,7 +13,7 @@ module Clicksign
     def add params={}
       Base.request :post,
         Base.api_url('envelopes', @envelope_key, Signer.model_name),
-        Base.build_data(params, { type: Signer.model_name }),
+        Base.build_data(params, Signer.model_name),
         {}
     end
   end
