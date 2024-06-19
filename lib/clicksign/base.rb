@@ -22,13 +22,16 @@ module Clicksign
       JSON[response]
     end
 
-    def self.build_data(params, model_name, id='')
+    def self.build_data(params, model_name, id='', custom_params={})
       data = {
         data: {
           attributes: params,
           type: model_name
         }
       }
+      unless custom_params.empty?
+        data[:data].merge! custom_params
+      end
       unless id.empty?
         data[:data][:id] = id
       end

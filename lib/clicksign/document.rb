@@ -10,10 +10,14 @@ module Clicksign
       @envelope_key = envelope_key
     end
 
+    def model_name
+      self.class.model_name
+    end
+
     def add params={}
       Base.request :post,
-        Base.api_url('envelopes', @envelope_key, Document.model_name),
-        Base.build_data(params, Document.model_name),
+        Base.api_url('envelopes', @envelope_key, model_name),
+        Base.build_data(params, model_name),
         {}
     end
   end

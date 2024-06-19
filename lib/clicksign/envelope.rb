@@ -11,26 +11,18 @@ module Clicksign
         {}
     end
 
-    def self.find key
-      request :get,
-        api_url(model_name, key),
-        {}
+    def initialize(envelope_key)
+      @envelope_key = envelope_key
     end
 
-    def self.update params={}, key
-      unless params[:data]&[:id]
-        raise 'must_send_envelope_id_inside_body'
-      end
-
-      request :patch,
-        api_url(model_name, key),
-        build_data(params, model_name, key ),
-        {}
+    def model_name
+      self.class.model_name
     end
 
-    def self.remove key
-      request :delete,
-        api_url(model_name, key),
+    def activate params={ status: 'running' }
+      Base.request :patch,
+        Base.api_url(model_name, @envelope_key),
+        Base.build_data(params, model_name, @envelope_key),
         {}
     end
   end

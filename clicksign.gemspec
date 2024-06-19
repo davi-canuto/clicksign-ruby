@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Ruby library to interact with Clicksign}
   spec.summary       = %q{Ruby library to interact with Clicksign}
   spec.license       = 'MIT'
+  spec.homepage      = "https://github.com/davi-canuto/clicksign-ruby"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

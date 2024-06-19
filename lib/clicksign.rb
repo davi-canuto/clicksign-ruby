@@ -6,6 +6,7 @@ require 'clicksign/base'
 require 'clicksign/envelope'
 require 'clicksign/document'
 require 'clicksign/signer'
+require 'clicksign/requirement'
 
 module Clicksign
   class << self
