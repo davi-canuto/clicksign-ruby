@@ -51,7 +51,7 @@ To upload a new document into Clicksign envelope you can use the following snipp
 ```ruby
 document = Clicksign::Document.new(@envelope_id).add({
   filename: '',
-  base64_content: "data:#{}\;base64,#{}"
+  content_base64: "data:#{}\;base64,#{}"
 })
 ```
 
