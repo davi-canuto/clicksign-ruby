@@ -8,7 +8,7 @@ Works on documentation version 2.0: Envelope
 With Bundler:
 
 ```
-gem 'clicksign', github: 'davi-canuto/clicksign-ruby', branch: 'main'
+gem 'clicksign_ruby'
 ```
 
 ## Usage
