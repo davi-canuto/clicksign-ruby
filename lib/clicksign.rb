@@ -15,7 +15,7 @@ module Clicksign
 
   def self.configure(&block)
     self.api_version = 'v3'
-    self.environment.to_sym == :sandbox
+    self.environment == :sandbox
 
     yield self
 
