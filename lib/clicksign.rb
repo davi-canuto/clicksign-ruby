@@ -15,6 +15,9 @@ module Clicksign
 
   def self.configure(&block)
     self.api_version = 'v3'
+    self.environment.to_sym == :sandbox
+
+    yield self
 
     if self.environment.to_sym == :production
       self.host = "https://app.clicksign.com"
@@ -23,7 +26,5 @@ module Clicksign
     end
 
     self.endpoint = self.host + "/api/#{self.api_version}"
-
-    yield self
   end
 end
