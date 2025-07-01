@@ -33,5 +33,12 @@ module Clicksign
         Base.build_data(params, model_name, @envelope_key),
         {}
     end
+
+    def update params={}
+      Base.request :patch,
+        Base.api_url(model_name, @envelope_key),
+        Base.build_data(params, model_name, @envelope_key),
+        {}
+    end
   end
 end
