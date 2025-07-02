@@ -14,6 +14,13 @@ module Clicksign
       self.class.model_name
     end
 
+    def add_bulk_requirements params={}
+      Base.request :post,
+        Base.api_url('envelopes', @envelope_key, "bulk_requirements"),
+        params.to_json,
+        {}
+    end 
+
     def add params={}, custom_params={}
       Base.request :post,
         Base.api_url('envelopes', @envelope_key, model_name),
