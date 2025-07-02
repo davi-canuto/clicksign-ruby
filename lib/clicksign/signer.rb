@@ -1,3 +1,5 @@
+require 'clicksign/envelope'
+
 module Clicksign
   class Signer < Base
     def self.model_name
@@ -18,6 +20,17 @@ module Clicksign
       Base.request :post,
         Base.api_url('envelopes', @envelope_key, model_name),
         Base.build_data(params, model_name),
+        {}
+    end
+
+    def delete signer_key
+      raise StandardError, 'Signer key is required' unless signer_key.present?
+
+      envelope = Clicksign::Envelope.new(@envelope_key).retrieve
+      raise StandardError, "Envelope #{@envelope_key} not in state for delete." unless envelope["data"]["attributes"]["status"].in? ["running", "draft"]
+
+      Base.request :delete,
+        Base.api_url('envelopes', @envelope_key, model_name, signer_key),
         {}
     end
   end

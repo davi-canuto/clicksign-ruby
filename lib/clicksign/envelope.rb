@@ -4,12 +4,7 @@ module Clicksign
       'envelopes'
     end
 
-    def self.create params={}
-      request :post,
-        api_url(model_name),
-        build_data(params, model_name),
-        {}
-    end
+    attr_accessor :envelope_key
 
     def initialize(envelope_key)
       @envelope_key = envelope_key
@@ -19,7 +14,27 @@ module Clicksign
       self.class.model_name
     end
 
+    def self.create params={}
+      request :post,
+        api_url(model_name),
+        build_data(params, model_name),
+        {}
+    end
+
+    def retrieve params={}
+      Base.request :get,
+        Base.api_url(model_name, @envelope_key),
+        {}
+    end
+
     def activate params={ status: 'running' }
+      Base.request :patch,
+        Base.api_url(model_name, @envelope_key),
+        Base.build_data(params, model_name, @envelope_key),
+        {}
+    end
+
+    def update params={}
       Base.request :patch,
         Base.api_url(model_name, @envelope_key),
         Base.build_data(params, model_name, @envelope_key),

@@ -11,6 +11,8 @@ module Clicksign
     def self.request(method, *params)
       params.last.merge!(headers)
       parse RestClient.public_send(method, *params)
+    rescue => e
+      raise StandardError, JSON.parse(e.http_body)
     end
 
     def self.api_url(*path)
